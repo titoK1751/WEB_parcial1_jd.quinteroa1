@@ -5,17 +5,14 @@ import { Actor } from "../services/actorService";
 
 interface ActorCardProps {
     actor: Actor;
-    onClick: (actor: Actor) => void;
 }
 
 export default function ActorCard ({
     actor,
-    onClick,
 }: ActorCardProps){
     return (
         <button
             type="button"
-            onClick={() => onClick(actor)}
             className="w-full rounded-lg border border-gray-300 p-4 text-left hover:bg-gray-100"
         >
             <Image

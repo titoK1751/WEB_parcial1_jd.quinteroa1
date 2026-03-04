@@ -6,7 +6,7 @@ import { Actor } from "../services/actorService";
 import ActorList from "../ui/ActorList";
 
 export default function ActorsPage(){
-    const { services, isLoading, error } = useActorServices();
+    const { actors, isLoading, error } = useActorServices();
 
     const [selectedActor, setSelectedActor] = useState<Actor | null>(null);
 
@@ -25,7 +25,7 @@ export default function ActorsPage(){
     return (
         <div className="container mx-auto p-8">
             <h1 className="text-3xl font-bold mb-6">Actores</h1>
-            <ActorList actors={services} onActorClick={handleActorClick} />
+            <ActorList actors={actors} onActorClick={handleActorClick} />
 
             {selectedActor && (
                 <div className="mt-8 rounded-lg border border-gray-300 p-4">
