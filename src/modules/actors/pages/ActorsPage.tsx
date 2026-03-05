@@ -1,17 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useActorServices } from "../hooks/useActorServices";
 import { Actor } from "../services/actorService";
 import ActorList from "../ui/ActorList";
 
 export default function ActorsPage(){
-    const { actors, isLoading, error } = useActorServices();
+    const { actors, isLoading, error, reloadActors } = useActorServices();
+    const [actorsState, setActorsState] = useState<Actor[]>([]);
 
     const [selectedActor, setSelectedActor] = useState<Actor | null>(null);
 
-    const handleActorClick = (Actor: Actor) => {
-        setSelectedActor(Actor);
+    useEffect(() => {
+        setActorsState(actors);
+    }, [actors]);
+
+
+    const handleActorUpdated = (updatedActor: Actor) => {
+        setActorsState((prevActors) =>
+            prevActors.map((actor) =>
+                actor.id === updatedActor.id ? updatedActor : actor
+            )
+        );
+
+        setSelectedActor((prevSelected) =>
+            prevSelected?.id === updatedActor.id ? updatedActor : prevSelected
+        );
+    };
+
+    const handleActorDeleted = async (deletedActorId: string) => {
+        setActorsState((prevActors) =>
+            prevActors.filter((actor) => actor.id !== deletedActorId)
+        );
+
+        await reloadActors();
+
+        setSelectedActor((prevSelected) =>
+            prevSelected?.id === deletedActorId ? null : prevSelected
+        );
     };
 
     if (isLoading){
@@ -25,7 +51,11 @@ export default function ActorsPage(){
     return (
         <div className="container mx-auto p-8">
             <h1 className="text-3xl font-bold mb-6">Actores</h1>
-            <ActorList actors={actors} onActorClick={handleActorClick} />
+            <ActorList
+                actors={actorsState}
+                onActorUpdated={handleActorUpdated}
+                onActorDeleted={handleActorDeleted}
+            />
 
             {selectedActor && (
                 <div className="mt-8 rounded-lg border border-gray-300 p-4">

@@ -19,5 +19,19 @@ export async function fetcher<T> (endpoint: string, options?: RequestInit): Prom
         );
     }
 
-    return response.json() as Promise<T>;
+    if (response.status === 204) {
+        return undefined as T;
+    }
+
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+        return undefined as T;
+    }
+
+    const rawBody = await response.text();
+    if (!rawBody) {
+        return undefined as T;
+    }
+
+    return JSON.parse(rawBody) as T;
 }

@@ -32,3 +32,16 @@ export const createActor = (data: actorFormData): Promise<Actor> => {
         body: JSON.stringify(data),
     });
 };
+
+export const updateActor = (id: string, data: actorFormData): Promise<Actor> => {
+    return fetcher<Actor>(`/v1/actors/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+    });
+};
+
+export const deleteActor = (id: string): Promise<void> => {
+    return fetcher<void>(`/v1/actors/${id}`, {
+        method: "DELETE",
+    });
+};
