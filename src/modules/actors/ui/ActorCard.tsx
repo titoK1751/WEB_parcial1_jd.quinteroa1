@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Actor, deleteActor, updateActor } from "../services/actorService";
 import ActorForm from "./ActorForm";
 import { actorFormData } from "../validation/actorSchema";
+import { useRouter } from "next/navigation";
 
 interface ActorCardProps {
     actor: Actor;
@@ -26,6 +27,8 @@ export default function ActorCard ({
     const [isDeleting, setIsDeleting] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const router = useRouter();
 
     const handleUpdateActor = async (data: actorFormData) => {
         setIsSubmitting(true);
@@ -139,6 +142,13 @@ export default function ActorCard ({
             <p className="text-sm text-gray-600">{actor.nationality}</p>
             </button>
             <div className="mt-3 flex gap-2">
+                <button
+                    type="button"
+                    onClick={() => router.push(`/actors/${actor.id}`)}
+                    className="rounded-md bg-blue-500 px-3 py-2 text-sm font-medium text-white hover:bg-blue-600"
+                >
+                    Ver detalle
+                </button>
                 <button
                     type="button"
                     onClick={() => setIsEditing(true)}

@@ -45,3 +45,10 @@ export const deleteActor = (id: string): Promise<void> => {
         method: "DELETE",
     });
 };
+
+export async function getActorById(id: string): Promise<Actor> {
+    const actors = await fetcher<Actor[]>("/v1/actors");
+    const actor = actors.find(a => a.id === id);
+    if (!actor) throw new Error('Actor no encontrado');
+    return actor;
+}
