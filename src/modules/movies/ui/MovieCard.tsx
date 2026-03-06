@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Movie, deleteMovie, updateMovie } from "../services/movieService";
 import { movieFormData } from "../validation/movieSchema";
 import MovieForm from "./MovieForm";
@@ -17,6 +18,13 @@ function formatReleaseDateForInput(releaseDate: string): string {
     return releaseDate.includes("T") ? releaseDate.split("T")[0] : releaseDate;
 }
 
+function formatReleaseDate(releaseDate: string): string {
+    if (!releaseDate) return "Sin fecha";
+    const parsedDate = new Date(releaseDate);
+    if (Number.isNaN(parsedDate.getTime())) return releaseDate;
+    return parsedDate.toLocaleDateString("es-CO");
+}
+
 export default function MovieCard({
     movie,
     onMovieUpdated,
@@ -26,6 +34,11 @@ export default function MovieCard({
     const [isDeleting, setIsDeleting] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const router = useRouter();
+
+    const actorName = movie.actors?.[0]?.name ?? movie.actor?.name ?? movie.actorName ?? "Sin actor asignado";
+    const prizeName = movie.prizes?.[0]?.name ?? movie.prize?.name ?? movie.prizeName ?? "Sin premio asignado";
 
     const handleUpdateMovie = async (data: movieFormData) => {
         setIsSubmitting(true);
@@ -133,11 +146,20 @@ export default function MovieCard({
                 className="mb-3 h-56 w-full rounded-md object-cover"
             />
             <h2 className="text-xl font-semibold">{movie.title}</h2>
-            <p className="text-sm text-gray-600">Realease date: {movie.releaseDate.split("T")[0]}</p>
-            <p className="text-sm text-gray-600">Country: {movie.country}</p>
-            <p className="text-sm text-gray-600">Duration: {movie.duration} min</p>
+            <p className="text-sm text-gray-600">Lanzamiento: {formatReleaseDate(movie.releaseDate)}</p>
+            <p className="text-sm text-gray-600">Actor: {actorName}</p>
+            <p className="text-sm text-gray-600">Premio: {prizeName}</p>
+            <p className="text-sm text-gray-600">{movie.country}</p>
+            <p className="text-sm text-gray-600">{movie.duration} min</p>
             <p className="text-sm text-gray-600">⭐ {movie.popularity}</p>
             <div className="mt-3 flex gap-2">
+                <button
+                    type="button"
+                    onClick={() => router.push(`/movies/${movie.id}`)}
+                    className="rounded-md bg-blue-500 px-3 py-2 text-sm font-medium text-white hover:bg-blue-600"
+                >
+                    Ver detalle
+                </button>
                 <button
                     type="button"
                     onClick={() => setIsEditing(true)}

@@ -28,6 +28,7 @@ export default function RootLayout({
     { name: "Movies", path: "/movies" },
     { name: "Crear Actor", path: "/actors/crear" },
     { name: "Crear Movie", path: "/movies/crear" },
+    { name: "Crear Premio", path: "/prizes" },
   ];
 
   return (

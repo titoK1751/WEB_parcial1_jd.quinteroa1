@@ -20,7 +20,11 @@ export interface Movie {
     releaseDate: string;
     popularity: number;
     actors?: MovieActor[];
+    actor?: MovieActor;
+    actorName?: string;
     prizes?: MoviePrize[];
+    prize?: MoviePrize;
+    prizeName?: string;
 }
 
 export const fetchMoviesServices = (): Promise<Movie[]> => {
