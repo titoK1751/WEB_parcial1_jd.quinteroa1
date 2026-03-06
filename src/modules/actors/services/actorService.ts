@@ -2,7 +2,7 @@ import { fetcher } from "@/shared/services/http";
 import { actorFormData } from "../validation/actorSchema";
 
 
-export interface movie {
+export interface ActorMovie {
     id: string;
     title: string;
     poster: string;
@@ -19,7 +19,7 @@ export interface Actor {
     nationality: string;
     birthDate: string;
     biography: string;
-    movies: movie[];
+    movies: ActorMovie[];
 }
 
 export const fetchActorServices = (): Promise<Actor[]> => {
@@ -43,6 +43,12 @@ export const updateActor = (id: string, data: actorFormData): Promise<Actor> => 
 export const deleteActor = (id: string): Promise<void> => {
     return fetcher<void>(`/v1/actors/${id}`, {
         method: "DELETE",
+    });
+};
+
+export const assignMovieToActor = (actorId: string, movieID: string): Promise<Actor> => {
+    return fetcher<Actor>(`/v1/actors/${actorId}/movies/${movieID}`, {
+        method: "POST",
     });
 };
 

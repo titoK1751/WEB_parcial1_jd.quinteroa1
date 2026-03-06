@@ -25,7 +25,9 @@ export default function RootLayout({
 }>) {
   const routes = [
     { name: "Actors", path: "/actors" },
+    { name: "Movies", path: "/movies" },
     { name: "Crear Actor", path: "/actors/crear" },
+    { name: "Crear Movie", path: "/movies/crear" },
   ];
 
   return (
